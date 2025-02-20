@@ -3,7 +3,7 @@
 
 """
 This file is part of Commix Project (https://commixproject.com).
-Copyright (c) 2014-2023 Anastasios Stasinopoulos (@ancst).
+Copyright (c) 2014-2025 Anastasios Stasinopoulos (@ancst).
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ def tamper(payload):
   def add_double_quotes(payload):
     settings.TAMPER_SCRIPTS[__tamper__] = True
     obf_char = '""'
-    if settings.TARGET_OS != "win":
+    if settings.TARGET_OS != settings.OS.WINDOWS:
       payload = re.sub(r'([b-zD-Z])', r'""\1', payload)
     else:
       word = "tokens"
@@ -42,12 +42,12 @@ def tamper(payload):
     for word in settings.IGNORE_TAMPER_TRANSFORMATION:
       _ = obf_char.join(word[i:i+1] for i in range(-1, len(word), 1))
       if _ in payload:
-        payload = payload.replace(_,_.replace(obf_char,""))
+        payload = payload.replace(_,_.replace(obf_char, ""))
     return payload
 
   if settings.EVAL_BASED_STATE != False:
     return payload
   else:
     return add_double_quotes(payload)
-  
-# eof 
+
+# eof
